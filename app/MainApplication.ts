@@ -1,11 +1,7 @@
 import {inject, singleton} from "tsyringe";
-import {Application} from "express";
+import ControllerRegister from "./ControllerRegister";
 
 @singleton()
 export default class MainApplication {
-    constructor(@inject("WebService") private webService: Application) {
-        webService.get('/', function (req, res) {
-            res.send('hello world 2');
-        })
-    }
+    constructor(private controllerRegister: ControllerRegister) { }
 }
