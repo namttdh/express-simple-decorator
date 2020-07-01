@@ -1,7 +1,9 @@
 import {inject, singleton} from "tsyringe";
-import ControllerRegister from "./ControllerRegister";
+import {IWebService, IWebServiceName} from "./_core/WebService/constract/IWebService";
 
 @singleton()
 export default class MainApplication {
-    constructor(private controllerRegister: ControllerRegister) { }
+    constructor(@inject(IWebServiceName) webService: IWebService) {
+        webService.run();
+    }
 }
