@@ -6,6 +6,6 @@ import MainApplication from "./MainApplication";
 
 dotenv.config(); //config dot .env
 
-autoImportFolder(require("path").join(__dirname, "provider"))
+autoImportFolder(require("path").join(__dirname, "provider"));
 
 container.resolve(MainApplication);
