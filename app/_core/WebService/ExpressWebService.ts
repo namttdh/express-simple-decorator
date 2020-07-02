@@ -1,5 +1,5 @@
 import {IWebService} from "./constract/IWebService";
-import {inject, singleton} from "tsyringe";
+import {container, inject, singleton} from "tsyringe";
 import express, {Application} from "express";
 import {IController} from "./constract/IController";
 import {CONTROLLER_DECORATOR_KEY} from "./decorators/Controller";
@@ -10,6 +10,8 @@ import {IParamDefinition} from "./constract/IParamDefinition";
 import {PARAMS_DECORATOR_KEY} from "./decorators/paramsHelper";
 import {IRouteBuilder} from "./constract/IRouteBuilder";
 import {ExpressRouteFactory} from "./ExpressRouteFactory";
+import {IMiddlewareDefinition} from "./constract/IMiddlewareDefinition";
+import {MIDDLEWARE_DECORATOR_KEY} from "./decorators/Middleware";
 
 @singleton()
 export class ExpressWebService implements IWebService{
@@ -45,6 +47,20 @@ export class ExpressWebService implements IWebService{
             const prefix = Reflect.getMetadata(CONTROLLER_DECORATOR_KEY, controller);
             const routes = Reflect.getMetadata(ROUTES_DECORATOR_KEY, controller) as Array<IRouteDefinition>;
             const methods = Reflect.getMetadata(PARAMS_DECORATOR_KEY, controller) as Map<string, Array<IParamDefinition>>;
+            const listMiddleware = Reflect.getMetadata(MIDDLEWARE_DECORATOR_KEY, controller) as IMiddlewareDefinition[];
+            const localMiddleware: Map<string, IMiddlewareDefinition> = new Map();
+
+            if (listMiddleware) {
+                listMiddleware.forEach(middleware => {
+                    if (middleware.methodName) {
+                        localMiddleware.set(middleware.methodName, middleware);
+                    } else {
+                        let middlewareInstance = container.resolve(middleware.middleware as any);
+                        this.expressApplication.use(prefix, middlewareInstance['apply']);
+                    }
+                });
+            }
+
             const expressRouteBuilders: Array<IRouteBuilder> = [];
             if (routes) {
                 routes.forEach(route => {
@@ -52,7 +68,8 @@ export class ExpressWebService implements IWebService{
                     routeBuilder
                         .setMethod(route.requestMethod)
                         .setPath(prefix + route.path)
-                        .setFunctionMethod(route.methodName);
+                        .setFunctionMethod(route.methodName)
+                        .setMiddleware(localMiddleware.get(route.methodName) as any);
 
                     if (methods) {
                         let params = methods.get(route.methodName);

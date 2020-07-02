@@ -33,7 +33,7 @@ export class ExpressRouteFactory implements IRouteFactory {
             this.expressApplication[route.getMethod()](route.getPath(), async(request: Request, response: Response) => {
                 let params = [];
                 for (const param of paramsSort) {
-                    params[param.index] = await this.resolveRoute(param, request, response);
+                    params[param.index] = await this.resolveRouteParams(param, request, response);
                 }
 
                 let result = controllerInstance[route.getFunctionMethod()].apply(controllerInstance, params);
@@ -44,7 +44,7 @@ export class ExpressRouteFactory implements IRouteFactory {
         });
     };
 
-    async resolveRoute(paramDefinition: IParamDefinition, request: Request, response: Response) {
+    async resolveRouteParams(paramDefinition: IParamDefinition, request: Request, response: Response) {
         switch (paramDefinition.type) {
             case ParamsType.REQUEST:
                 return request;

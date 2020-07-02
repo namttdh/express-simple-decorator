@@ -6,13 +6,17 @@ import DTO from "./DTO";
 import {Body} from "../_core/WebService/decorators/Body";
 import {HttpMethod} from "../_core/WebService/constants/HttpMethod";
 import {Param} from "../_core/WebService/decorators/Param";
+import {Middleware} from "../_core/WebService/decorators/Middleware";
+import {TestMiddleware} from "./TestMiddleware";
+
 
 @Controller('users')
+@Middleware(TestMiddleware)
 export default class UserController {
     @Route({path: 'hello/:userId'})
     hello(@Response response, test: number, @Body abc, @Param('userId') userId: number, @Request request) {
         console.log(userId);
-        response.send("hello world");//
+        response.send("hello world");
     }
 
     @Route({path: 'hello', method: HttpMethod.POST})
@@ -26,3 +30,4 @@ export default class UserController {
         console.log('user bye ahi hi');
     }
 }
+

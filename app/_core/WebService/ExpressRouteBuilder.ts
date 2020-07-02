@@ -1,16 +1,17 @@
 import {HttpMethod} from './constants/HttpMethod';
 import {IParamDefinition} from "./constract/IParamDefinition";
 import {IRouteBuilder} from "./constract/IRouteBuilder";
+import {IMiddlewareDefinition} from "./constract/IMiddlewareDefinition";
 
 export class ExpressRouteBuilder implements IRouteBuilder {
-    public middlewares: Array<any> = [];
+    public middleware: Array<any> = [];
     public params: Array<IParamDefinition> = [];
     public method?: HttpMethod = HttpMethod.GET;
     public path: string;
     public functionMethod: string;
 
-    addMiddleware(middleware: void): ExpressRouteBuilder {
-        this.middlewares.push(middleware);
+    addMiddleware(middleware: IMiddlewareDefinition): ExpressRouteBuilder {
+        this.middleware.push(middleware);
 
         return this;
     }
@@ -51,10 +52,6 @@ export class ExpressRouteBuilder implements IRouteBuilder {
         return this.path;
     }
 
-    getMiddlewares() {
-        return this.middlewares;
-    }
-
     setFunctionMethod(method) {
         this.functionMethod = method;
 
@@ -63,5 +60,15 @@ export class ExpressRouteBuilder implements IRouteBuilder {
 
     getFunctionMethod() {
         return this.functionMethod;
+    }
+
+    getMiddleware() {
+        return this.middleware;
+    }
+
+    setMiddleware(middleware: IMiddlewareDefinition[]) {
+        this.middleware = middleware;
+
+        return this;
     }
 }

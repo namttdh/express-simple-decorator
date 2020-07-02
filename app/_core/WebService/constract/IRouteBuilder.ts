@@ -1,8 +1,13 @@
 import {HttpMethod} from "../constants/HttpMethod";
 import {IParamDefinition} from "./IParamDefinition";
+import {IMiddlewareDefinition} from "./IMiddlewareDefinition";
 
 export interface IRouteBuilder {
-    addMiddleware(middleware: void);
+    addMiddleware(middleware: IMiddlewareDefinition);
+
+    setMiddleware(middleware: IMiddlewareDefinition[]);
+
+    getMiddleware();
 
     setMethod(method: HttpMethod);
 
@@ -17,8 +22,6 @@ export interface IRouteBuilder {
     setParams(params: IParamDefinition[]);
 
     getParams(): IParamDefinition[];
-
-    getMiddlewares();
 
     setFunctionMethod(method);
 
