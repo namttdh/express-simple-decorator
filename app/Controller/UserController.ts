@@ -5,12 +5,13 @@ import {Response} from "../_core/WebService/decorators/Response";
 import DTO from "./DTO";
 import {Body} from "../_core/WebService/decorators/Body";
 import {HttpMethod} from "../_core/WebService/constants/HttpMethod";
+import {Param} from "../_core/WebService/decorators/Param";
 
 @Controller('users')
 export default class UserController {
-    @Route({path: 'hello'})
-    hello(@Response response, test:number, @Body abc, xyz:number, @Request request) {
-        console.log(abc);
+    @Route({path: 'hello/:userId'})
+    hello(@Response response, test: number, @Body abc, @Param('userId') userId: number, @Request request) {
+        console.log(userId);
         response.send("hello world");//
     }
 

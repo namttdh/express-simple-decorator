@@ -7,6 +7,7 @@ import {IController} from "./constract/IController";
 import {ParamsType} from "./constants/ParamsType";
 import {BodyParamsResolve} from "./paramsResolve/BodyParamsResolve";
 import {IParamDefinition} from "./constract/IParamDefinition";
+import {ParamResolve} from "./paramsResolve/ParamResolve";
 
 @singleton()
 export class ExpressRouteFactory implements IRouteFactory {
@@ -22,6 +23,7 @@ export class ExpressRouteFactory implements IRouteFactory {
     register()
     {
         this.paramRegister.set(ParamsType.BODY, BodyParamsResolve);
+        this.paramRegister.set(ParamsType.PARAM, ParamResolve);
     }
 
     build(controller: IController, builder: Array<IRouteBuilder>) {
