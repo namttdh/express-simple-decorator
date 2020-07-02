@@ -5,40 +5,34 @@ import express, {Application, Request, Response} from "express";
 import {container, inject, singleton} from "tsyringe";
 import {IController} from "./constract/IController";
 import {ParamsType} from "./constants/ParamsType";
-import {BodyParamsResolve} from "./paramsResolve/BodyParamsResolve";
 import {IParamDefinition} from "./constract/IParamDefinition";
-import {ParamResolve} from "./paramsResolve/ParamResolve";
+import {paramsResolveWorker} from "./customParamsResolve";
+import {getStatusCode} from "http-status-codes";
 
 @singleton()
-export class ExpressRouteFactory implements IRouteFactory {
+export class ExpressRouteWorker implements IRouteFactory {
     private readonly expressApplication: Application;
     private readonly paramRegister: Map<ParamsType, any> = new Map();
 
     constructor(@inject(IWebServiceName) webService: IWebService) {
         this.expressApplication = webService.instance();
         this.expressApplication.use(express.urlencoded());
-        this.register();
-    }
-
-    register()
-    {
-        this.paramRegister.set(ParamsType.BODY, BodyParamsResolve);
-        this.paramRegister.set(ParamsType.PARAM, ParamResolve);
+        this.paramRegister = paramsResolveWorker();
     }
 
     build(controller: IController, builder: Array<IRouteBuilder>) {
         let controllerInstance = container.resolve(controller as any);
         builder.forEach(route => {
             let paramsSort = route.getParams();
-            this.expressApplication[route.getMethod()](route.getPath(), async(request: Request, response: Response) => {
+            this.expressApplication[route.getMethod()](route.getPath(), route.getMiddleware(), async(request: Request, response: Response) => {
                 let params = [];
                 for (const param of paramsSort) {
                     params[param.index] = await this.resolveRouteParams(param, request, response);
                 }
 
-                let result = controllerInstance[route.getFunctionMethod()].apply(controllerInstance, params);
+                let result = await controllerInstance[route.getFunctionMethod()].apply(controllerInstance, params);
                 if (!response.headersSent) {
-                    response.send(result);
+                    response.status(route.getResponseCode()).send(result);
                 }
             })
         });

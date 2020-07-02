@@ -1,9 +1,10 @@
 import {IRouteDefinition} from "../constract/IRouteDefinition";
 import {HttpMethod} from "../constants/HttpMethod";
+import {OK} from "http-status-codes";
 
 export const ROUTES_DECORATOR_KEY = Symbol('list_routes');
 
-export const Route = ({path, method = HttpMethod.GET}): MethodDecorator => {
+export const Route = ({path, method = HttpMethod.GET, responseCode = OK}): MethodDecorator => {
     path = path[0] === '/' ? path : '/' + path;
 
     return (target, propertyKey: string, descriptor): void => {
@@ -12,7 +13,8 @@ export const Route = ({path, method = HttpMethod.GET}): MethodDecorator => {
         routes.push({
             requestMethod: method,
             path,
-            methodName: propertyKey
+            methodName: propertyKey,
+            responseCode
         });
         Reflect.defineMetadata(ROUTES_DECORATOR_KEY, routes, target.constructor);
     };

@@ -1,11 +1,10 @@
 import "reflect-metadata"; //important
 import dotenv from 'dotenv';
-import {autoImportFolder} from "./_core/utilities/helper";
 import {container} from "tsyringe";
 import MainApplication from "./MainApplication";
+import Kernel from "./app/Kernel";
 
 dotenv.config(); //config dot .env
 
-autoImportFolder(require("path").join(__dirname, "provider"));
-
+container.resolve(Kernel).register();
 container.resolve(MainApplication);

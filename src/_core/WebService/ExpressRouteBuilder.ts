@@ -2,6 +2,7 @@ import {HttpMethod} from './constants/HttpMethod';
 import {IParamDefinition} from "./constract/IParamDefinition";
 import {IRouteBuilder} from "./constract/IRouteBuilder";
 import {IMiddlewareDefinition} from "./constract/IMiddlewareDefinition";
+import {OK} from "http-status-codes";
 
 export class ExpressRouteBuilder implements IRouteBuilder {
     public middleware: Array<any> = [];
@@ -9,6 +10,7 @@ export class ExpressRouteBuilder implements IRouteBuilder {
     public method?: HttpMethod = HttpMethod.GET;
     public path: string;
     public functionMethod: string;
+    public responseCode?: number = OK;
 
     addMiddleware(middleware: IMiddlewareDefinition): ExpressRouteBuilder {
         this.middleware.push(middleware);
@@ -63,11 +65,21 @@ export class ExpressRouteBuilder implements IRouteBuilder {
     }
 
     getMiddleware() {
-        return this.middleware;
+        return this.middleware ?? [];
     }
 
     setMiddleware(middleware: IMiddlewareDefinition[]) {
         this.middleware = middleware;
+
+        return this;
+    }
+
+    getResponseCode() {
+        return this.responseCode ?? OK;
+    }
+
+    setResponseCode(code) {
+        this.responseCode = code;
 
         return this;
     }

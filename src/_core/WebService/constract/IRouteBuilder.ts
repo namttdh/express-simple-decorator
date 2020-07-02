@@ -26,4 +26,8 @@ export interface IRouteBuilder {
     setFunctionMethod(method);
 
     getFunctionMethod();
+
+    setResponseCode(code);
+
+    getResponseCode();
 }

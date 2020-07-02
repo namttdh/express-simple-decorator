@@ -5,7 +5,7 @@ export const PARAMS_DECORATOR_KEY = Symbol('list_params');
 export const setParamMetadata = (paramsType, target, propertyKey, parameterIndex, objectTransfer?: any) => {
     const methods = Reflect.getMetadata(PARAMS_DECORATOR_KEY, target.constructor) as Map<string, Array<IParamDefinition>> ?? new Map();
     let params = methods.get(propertyKey) ?? [];
-    params.push({
+    params.unshift({
         index: parameterIndex,
         type: paramsType,
         methodName: propertyKey,

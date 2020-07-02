@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "debug": "ts-node-dev --respawn --debug --transpileOnly --no-notify app/main.ts"
+    "debug": "ts-node-dev --respawn --debug --transpileOnly --no-notify src/main.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,7 @@
     "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-status-codes": "^1.4.0",
     "remove": "^0.1.5"
   },
   "devDependencies": {
