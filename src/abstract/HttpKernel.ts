@@ -1,9 +1,10 @@
 import {container} from "tsyringe";
-import {appConfig} from "../../../config/app.config";
-import {ServiceProvider} from "./ServiceProvider";
+import {ServiceProvider} from "./index";
 
-export abstract class HttpKernel {
+abstract class HttpKernel {
     protected middleware;
+
+    abstract appConfig();
 
     register() {
         //register DC
@@ -12,7 +13,7 @@ export abstract class HttpKernel {
         });
         let listProvider = [];
         //register all provider
-        appConfig.provider.forEach((item: any) => {
+        this.appConfig().provider.forEach((item: any) => {
             let provider = container.resolve(item) as ServiceProvider;
             provider.register();
             listProvider.push(provider);
@@ -30,3 +31,5 @@ export abstract class HttpKernel {
         }
     }
 }
+
+export default HttpKernel;

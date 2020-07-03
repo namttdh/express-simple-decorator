@@ -1,4 +1,4 @@
-import {HttpMethod} from "../constants/HttpMethod";
+import {HttpMethod} from "../constants";
 
 export interface IRouteDefinition {
     requestMethod: HttpMethod;

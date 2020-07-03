@@ -7,7 +7,6 @@ import {IController} from "./constract/IController";
 import {ParamsType} from "./constants/ParamsType";
 import {IParamDefinition} from "./constract/IParamDefinition";
 import {paramsResolveWorker} from "./customParamsResolve";
-import {getStatusCode} from "http-status-codes";
 
 @singleton()
 export class ExpressRouteWorker implements IRouteFactory {

@@ -1,8 +1,8 @@
-import {HttpMethod} from './constants/HttpMethod';
 import {IParamDefinition} from "./constract/IParamDefinition";
 import {IRouteBuilder} from "./constract/IRouteBuilder";
 import {IMiddlewareDefinition} from "./constract/IMiddlewareDefinition";
 import {OK} from "http-status-codes";
+import {HttpMethod} from "./constants";
 
 export class ExpressRouteBuilder implements IRouteBuilder {
     public middleware: Array<any> = [];

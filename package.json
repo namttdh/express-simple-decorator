@@ -1,12 +1,24 @@
 {
   "name": "express-simple-decorator",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is new express framework",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "debug": "ts-node-dev --respawn --debug --transpileOnly --no-notify src/main.ts"
+    "debug": "ts-node-dev --respawn --debug --transpileOnly --no-notify src/main.ts",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nguyen Nam",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namttdh/express-simple-decorator.git"
+  },
   "license": "ISC",
   "dependencies": {
     "class-validator": "^0.12.2",

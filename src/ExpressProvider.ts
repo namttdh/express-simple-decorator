@@ -1,9 +1,9 @@
-import {ServiceProvider} from "./abstract/ServiceProvider";
 import {IWebServiceName} from "./constract/IWebService";
 import {ExpressWebService} from "./ExpressWebService";
 import {IRouterFactoryName} from "./constract/IRouteFactory";
 import {ExpressRouteWorker} from "./ExpressRouteWorker";
 import {inject, singleton} from "tsyringe";
+import {ServiceProvider} from "./abstract";
 
 @singleton()
 export class ExpressProvide extends ServiceProvider {

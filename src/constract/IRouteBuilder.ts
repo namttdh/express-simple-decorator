@@ -1,6 +1,6 @@
-import {HttpMethod} from "../constants/HttpMethod";
 import {IParamDefinition} from "./IParamDefinition";
 import {IMiddlewareDefinition} from "./IMiddlewareDefinition";
+import {HttpMethod} from "../constants";
 
 export interface IRouteBuilder {
     addMiddleware(middleware: IMiddlewareDefinition);
