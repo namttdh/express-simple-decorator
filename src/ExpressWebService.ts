@@ -18,12 +18,16 @@ export class ExpressWebService implements IWebService{
     private readonly expressApplication: Application;
     private readonly listController: Array<any>;
     private readonly expressRouteFactory: ExpressRouteWorker;
+    private readonly globalMiddleware: Array<any>;
+    private readonly instanceMiddleware: Map<any, any> = new Map();
 
-    constructor(@inject('controllers') listController: Array<IController>) {
+    constructor(@inject('controllers') listController: Array<IController>, @inject('globalMiddleware') globalMiddleware: Array<any>) {
         this.listController = listController;
+        this.globalMiddleware = globalMiddleware ?? [];
         this.expressApplication = express();
         this.expressRouteFactory = new ExpressRouteWorker(this);
         this.registerController();
+        this.registerGlobalMiddleware();
     }
 
     run() {
@@ -34,6 +38,12 @@ export class ExpressWebService implements IWebService{
 
     instance() {
         return this.expressApplication;
+    }
+
+    registerGlobalMiddleware() {
+        this.globalMiddleware.forEach(middleware => {
+            this.expressApplication.use(this.instanceMiddleware.get(middleware));
+        })
     }
 
     registerController() {
@@ -53,21 +63,21 @@ export class ExpressWebService implements IWebService{
     }
 
     resolveSingletonMiddleware(listMiddleware?: IMiddlewareDefinition[]) {
-        const instanceMiddleware: Map<any, any> = new Map();
+
         if (!listMiddleware) return new Map();
 
         listMiddleware.forEach(middleware => {
             if (typeof middleware.middleware === 'string' || Reflect.getMetadata(MIDDLEWARE_DECORATOR_KEY, middleware.middleware)) {
-                if (!instanceMiddleware.get(middleware.middleware)) {
+                if (!this.instanceMiddleware.get(middleware.middleware)) {
                     let middlewareInstance = container.resolve(middleware.middleware as any);
-                    instanceMiddleware.set(middleware.middleware, middlewareInstance['apply']);
+                    this.instanceMiddleware.set(middleware.middleware, middlewareInstance['apply']);
                 }
             } else {
-                instanceMiddleware.set(middleware.middleware, middleware.middleware);
+                this.instanceMiddleware.set(middleware.middleware, middleware.middleware);
             }
         });
 
-        return instanceMiddleware;
+        return this.instanceMiddleware;
     }
 
     resolveLocalMiddleware(prefix:string, listMiddleware?: IMiddlewareDefinition[]) {

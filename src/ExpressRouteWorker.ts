@@ -1,7 +1,7 @@
 import {IRouteFactory} from "./constract/IRouteFactory";
 import {IRouteBuilder} from "./constract/IRouteBuilder";
 import {IWebService, IWebServiceName} from "./constract/IWebService";
-import express, {Application, Request, Response} from "express";
+import {Application, Request, Response} from "express";
 import {container, inject, singleton} from "tsyringe";
 import {IController} from "./constract/IController";
 import {ParamsType} from "./constants/ParamsType";
@@ -15,7 +15,6 @@ export class ExpressRouteWorker implements IRouteFactory {
 
     constructor(@inject(IWebServiceName) webService: IWebService) {
         this.expressApplication = webService.instance();
-        this.expressApplication.use(express.urlencoded());
         this.paramRegister = paramsResolveWorker();
     }
 
