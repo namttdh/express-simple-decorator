@@ -70,12 +70,12 @@ export class ExpressWebService implements IWebService{
             if (typeof middleware.middleware === 'string' || Reflect.getMetadata(MIDDLEWARE_DECORATOR_KEY, middleware.middleware)) {
                 if (!this.instanceMiddleware.get(middleware.middleware)) {
                     let middlewareInstance = container.resolve(middleware.middleware as any);
-                    if (Reflect.getMetadata(MIDDLEWARE_DECORATOR_KEY, middleware.middleware)) {
+                    if (typeof middleware.middleware === 'string') {
+                        //case middleware is alias string
+                        this.instanceMiddleware.set(middleware.middleware, middlewareInstance);
+                    } else {
                         //case middleware is class with decorate @Middleware
                         this.instanceMiddleware.set(middleware.middleware, middlewareInstance['apply']);
-                    } else {
-                        //case middleware is alias
-                        this.instanceMiddleware.set(middleware.middleware, middlewareInstance);
                     }
                 }
             } else {

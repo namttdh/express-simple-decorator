@@ -25,9 +25,7 @@ abstract class HttpKernel {
 
         //register global middleware
         for (const [key, value] of Object.entries(this.middleware)) {
-            container.register(key, {
-                useClass: value as any,
-            });
+            container.register(key, value as any);
         }
     }
 }
