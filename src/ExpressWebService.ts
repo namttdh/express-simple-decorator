@@ -26,8 +26,8 @@ export class ExpressWebService implements IWebService{
         this.globalMiddleware = globalMiddleware ?? [];
         this.expressApplication = express();
         this.expressRouteFactory = new ExpressRouteWorker(this);
-        this.registerController();
         this.registerGlobalMiddleware();
+        this.registerController();
     }
 
     run() {
