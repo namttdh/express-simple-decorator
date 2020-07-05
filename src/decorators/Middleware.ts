@@ -1,12 +1,14 @@
 import {NextFunction, Request, Response} from "express";
 import {IMiddlewareDefinition} from "../constract/IMiddlewareDefinition";
 import {BaseMiddleware} from "../abstract";
+import {singleton} from "tsyringe";
 
 export const MIDDLEWARE_DECORATOR_KEY = Symbol('middleware_prefix');
 
 const Middleware = (middleware?: any): any => {
     return (target: any, propertyKey: string) => {
         if (!middleware) {
+            singleton()(target)
             Reflect.defineMetadata(MIDDLEWARE_DECORATOR_KEY, true, target);
         } else {
             let currentTarget = propertyKey ? target.constructor : target;
