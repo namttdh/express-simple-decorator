@@ -40,6 +40,10 @@ export class ExpressWebService implements IWebService{
         return this.expressApplication;
     }
 
+    express() {
+        return express;
+    }
+
     registerGlobalMiddleware() {
         this.globalMiddleware.forEach(middleware => {
             this.expressApplication.use(middleware);
