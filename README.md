@@ -7,7 +7,7 @@ typescript
 ```
 and install
 ```
-npm install react-particles-js || yarn add react-particles-js
+npm install express-simple-decorator || yarn add express-simple-decorator
 
 ```
 ## How to use
