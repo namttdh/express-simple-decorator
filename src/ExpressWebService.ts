@@ -79,7 +79,7 @@ export class ExpressWebService implements IWebService{
                         this.instanceMiddleware.set(middleware.middleware, middlewareInstance);
                     } else {
                         //case middleware is class with decorate @Middleware
-                        this.instanceMiddleware.set(middleware.middleware, middlewareInstance['apply']);
+                        this.instanceMiddleware.set(middleware.middleware, middlewareInstance['apply'].bind(middlewareInstance));
                     }
                 }
             } else {
